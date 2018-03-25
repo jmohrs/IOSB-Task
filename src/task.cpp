@@ -24,7 +24,7 @@ using namespace cv;
 #define HELP(err_str)           err_str =  "Usage: task [bm] [sgbm]\n\n"                                    \
                                            "Options:\n"                                                     \
                                            "   bm:   Use \"Block Matching\" to compute a disparity map \n"  \
-                                           "   sgbm: Use \"Semi-Global Block Matching\" to compute a disparity amp\n" 
+                                           "   sgbm: Use \"Semi-Global Block Matching\" to compute a disparity map\n" 
 
 int main(int argc, char **argv)
 {

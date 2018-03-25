@@ -1,0 +1,83 @@
+Titel: description.txt
+Datum: 25.3.2018
+Autor: Jonas M.
+
+
+Inhalt:
+============================================================================
+    1. Programmbeschreibung
+    2. Allgemeines zur Disparitätsschätzung
+
+
+
+
+Programmbeschreibung
+============================================================================
+----------------------------------------------------------------------------
+Das Programm besteht aus einer Quelldatei "task.cpp" und einer Headerdatei
+"task.hpp". 
+In der Headerdatei befinden sich ausschließlich DEFINE Direktiven zur
+Kapselung von spezifischen Konfigurationswerten.
+In der Quelldatei gibt es die Main-Methode die den Kontrollfluss des
+Programms bestimmt:
+    - Zunächst werden die übergebenen Argumente des Programms auf sinnvolle
+      Werte überprüft. Im Fehlerfall wird ein Hilfstext ausgegeben und das
+      Programm wird beendet.
+    - Im nächsten Schritt werden die in der Headerdatei konfigurierten
+      Input-Bilder mit OpenCV als Grauwert-Bilder geladen. Für die geladenen
+      Bilder wird jeweils ein eigener Frame zur Darstellung erstellt und
+      auf eine bestimmte Bildschirmposition verschoben.
+    - Im letzten Abschnitt des Programms wird überprüft mit welchem Algo-
+      rithmus die Disparitätskarte erstellt werden soll. Dazu wird überprüft
+      welche Optionen dem Programm übergeben wurden. Bei Übergabe der Option
+      "--bm" wird der "Block Matching" Algorithmus zur Berechnung der
+      Disparitätskarte genutzt. Die maximale Disparität und Blockgröße
+      können in der Headerdatei konfiguriert werden. Bei der Übergabe der
+      Option "--sgbm" wird "Semi Global Block Matching" Algorithmus verwendet.
+      In der Headerdatei finden sich ebenfalls Konfigurationsparameter die
+      nach Anwendung angepasst werden können. Das Ergebnis des/der
+      verwendeten Algorithmen wird in einem separten Frame dargestellt und
+      unter "./pictures/output" gespeichert.
+----------------------------------------------------------------------------
+
+Allgemeines zur Disparitätsschätzung
+============================================================================
+----------------------------------------------------------------------------
+Zur Disparitätsschätzung werden zwei unterschiedliche Bilder der selben
+Szene benötigt. Die grundlegende Aufgabe besteht nun darin, einem Pixel
+des linken Bilds, einen Pixel des rechten Bilds zuzuordnen. Die Disparität
+beschreibt demnach den Versatz der Projektionen eines Punkts der Szene im
+linken und im rechten Bild. Die Disparitätskarte enthätlt die Disparitätswerte
+aller oder nur ausgewählter Pixel und kann bspw. zur Tiefenschätzung oder
+3D-Rekonstruktion genutzt werden.
+
+Um einem Pixel des linken Bilds einen Pixel des rechten Bilds zuzuordnen, wird
+mehr Information benötigt als lediglich der Grauwert des Pixels, da dieser
+im Allgemeinen nicht eindeutig sein muss. Stattdessen wird die lokale Umgebung
+des Pixels in der Form von Boxen bei der Disparitätsschätzung verwendet. Dazu
+wird die Box eines Pixels aus dem linken Bild, mit den Boxen von möglichen Pixeln
+aus dem rechten Bild verglichen. Zum Vergleich kann zum Beispiel die Summe
+der absoluten Differenzen verwendet werden. Demnach wird einem Pixel aus dem
+linken Bild einem Pixel aus dem rechten Bild zugeordent wenn die Summe der
+absoluten Differenzen der beiden Boxen minimal ist.
+Wichtige Konfigurationsparameter sind die Größe der verwendeten Box, sowie die
+maximale Disparität, welche den möglichen Suchbereich einschränkt.
+
+Der Suchraum möglicher Pixel im rechten Bild, folgen den Epipolaren Linien. Diese
+müssen durch die intrinsichen und extrinsischen Eigenschaften der verwendeten
+Kameras bestimmt werden. Falls die Kameras lediglisch horizontal verschoben sind,
+dann sind die Epipolaen Linie ebenfalls Horizontal im rechten Bild.
+
+Eine zusätzliche Forderungen bei der Disparitätsschätzung ist die Forderung
+nach Glattheit der Disparitätswerte. Das bedeutet der Disparitätswert eines
+Pixels sollte generell nicht von den Disparitätswerten seiner benachbarten
+Pixel abweichen.
+
+Insgesamt gilt es, den Pixeln Disparitätswerte zuzuordnen, sodass der folgende
+Term minimiert wird:
+
+Eij = |G1(i,j) - G2(i,j + D(i,j))| + k * | delta(D(i,j)) |
+
+Je nach Algorithmus wird ein modifizierte Form des Minimierungsterms gewählt.
+
+

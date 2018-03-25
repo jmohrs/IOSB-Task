@@ -79,6 +79,6 @@
 #define TASK_SGBM_MIN_DISP_VAL              0
 #define TASK_SGBM_MAX_DISP_VAL              16
 #define TASK_SGBM_BOX_SIZE                  3
-#define TASK_SGBM_WEIGHT_I                  20
-#define TASK_SGBM_WEIGHT_II                 30
+#define TASK_SGBM_WEIGHT_I                  200
+#define TASK_SGBM_WEIGHT_II                 300
 
